@@ -33,7 +33,7 @@ export default class App extends Component {
 
   render() {
     const { barcodeValue, barcodeType, hasCameraPermission } = this.state;
-    const barcodeFriendly = barcodeValue ? barcodeValue : "Scan a barcode";
+    const barcodeFriendly = barcodeValue ? barcodeValue : "Scan barcode";
     const barcodeFound = !!barcodeValue;
 
     let containerStyles = [ styles.container ];
@@ -63,13 +63,17 @@ export default class App extends Component {
           <Text>Requesting for camera permission</Text> :
           hasCameraPermission === false ?
             <Text>Camera permission is not granted</Text> :
-            <BarCodeScanner
-              onBarCodeRead={this._handleBarCodeRead}
-              style={{ height: 200, width: 200 }}
-            />
+            !barcodeFound && (
+              <BarCodeScanner
+                onBarCodeRead={this._handleBarCodeRead}
+                style={{ height: 200, width: 200 }}
+              />
+            )
+
         }
 
-        <Button onPress={this._handleClearBarcode } title="Clear" color="#fff" />
+        { barcodeFound && (<Button onPress={this._handleClearBarcode } title="Clear" color="#fff" />) }
+
       </View>
     );
   }
@@ -84,13 +88,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#2c3e50'
   },
   barcode: {
-    marginVertical: 24,
-    minHeight: 200
+    marginVertical: 24
   },
   barcodeText: {
-    fontSize: 32,
+    fontSize: 48,
     color: "#fff",
-    textAlign: "center"
+    textAlign: "center",
+    marginVertical: 24
   },
   barcodeResult: {
     fontSize: 64,
